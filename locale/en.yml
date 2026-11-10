@@ -119,6 +119,7 @@ ernestdefoe-kudos:
       kudos_already_this_week: You've already thanked them this week. Try again next week!
       kudos_bad_week: That week doesn't exist.
       kudos_bad_action: That isn't something a moderator can do here.
+      kudos_receiver_unavailable: This member can't receive kudos right now.
 
   admin:
     settings:
@@ -138,15 +139,17 @@ ernestdefoe-kudos:
         friday: Friday
         saturday: Saturday
       timezone: Timezone for the week
-      timezone_help: A new week (and new kudos) starts at midnight here. Changing this or the start day never moves kudos already given.
+      timezone_help: A new week (and new kudos) starts at midnight here. A change to this or the start day takes effect when the current week ends, so this week's kudos and allowances stay as they are.
       timezone_forum: The forum's timezone (UTC if none is set)
+      min_account_days: Account age before kudos count toward the spotlight (days)
+      min_account_days_help: Kudos from newer accounts still show on the wall; they just don't help anyone into the spotlight. 0 counts everyone.
       moderation: Moderators approve kudos first
-      moderation_help: New kudos wait in a queue on the wall until a moderator approves them. Moderators' own kudos skip the queue.
+      moderation_help: New kudos wait in a queue on the wall until a moderator approves them. Moderators' own kudos skip the queue. With the queue on, the spotlight is picked a day into the new week, so late approvals still count.
       banner: Show the spotlight banner above the discussion list
       banner_help: Last week's most-thanked member, while this week runs. Members can hide it.
     spotlight:
       heading: Weekly spotlight
-      help: Every week, once it ends, the member who got the most kudos goes in the spotlight (ties go to whoever got there first). The forum's scheduler must be running.
+      help: Every week, once it ends, the member who got the most kudos goes in the spotlight (ties go to whoever got there first). Unconfirmed and suspended members are skipped. The forum's scheduler must be running.
       group: Put the spotlight member in a group for a week
       group_help: They join it for the week after theirs and leave it when the next spotlight is chosen. Members who were in it already stay in it.
       group_none: Create a group under Permissions first (the built-in groups can't be used).

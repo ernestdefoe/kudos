@@ -25,6 +25,8 @@ use Flarum\Api\Resource\ForumResource;
 use Flarum\Api\Schema;
 use Flarum\Extend;
 use Flarum\Gdpr\Extend\UserData;
+use Flarum\Settings\Event\Saved as SettingsSaved;
+use Flarum\Settings\Event\Saving as SettingsSaving;
 use Flarum\User\Event\Deleted;
 use Illuminate\Console\Scheduling\Event as ScheduledEvent;
 
@@ -84,6 +86,7 @@ return [
         ->default('ernestdefoe-kudos.allowance', 3)
         ->default('ernestdefoe-kudos.start_day', 1)
         ->default('ernestdefoe-kudos.moderation', false)
+        ->default('ernestdefoe-kudos.min_account_days', 7)
         ->serializeToForum('kudosNav', 'ernestdefoe-kudos.nav', 'boolval'),
 
     (new Extend\Console())
@@ -93,7 +96,16 @@ return [
         }),
 
     // The foreign keys do this too, where the database enforces them (SQLite may not).
+    // A changed week rule is scheduled the moment it's saved, to start when the current week ends (Weeks).
     (new Extend\Event())
+        // Before the save: make sure the rule in force is recorded with the OLD values.
+        ->listen(SettingsSaving::class, fn () => resolve(\ErnestDefoe\Kudos\Weeks::class)->current())
+        ->listen(SettingsSaved::class, function (SettingsSaved $event) {
+            $keys = ['ernestdefoe-kudos.start_day', 'ernestdefoe-kudos.timezone', 'ernestdefoe-festoon.timezone', 'ernestdefoe-fanfare.timezone', 'ernestdefoe-logo-manager.config'];
+            if (array_intersect($keys, array_keys($event->settings))) {
+                resolve(\ErnestDefoe\Kudos\Weeks::class)->current();
+            }
+        })
         ->listen(Deleted::class, function (Deleted $event) {
             $id = $event->user->id;
             \ErnestDefoe\Kudos\Kudos::query()->where('giver_id', $id)->update(['giver_id' => null]);

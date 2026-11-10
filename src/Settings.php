@@ -20,6 +20,8 @@ final class Settings
     public const START_DAY = self::PREFIX.'start_day';
     public const TIMEZONE = self::PREFIX.'timezone';
     public const MODERATION = self::PREFIX.'moderation';
+    /** Only kudos from accounts at least this many days old (when they gave) count toward the spotlight. */
+    public const MIN_ACCOUNT_DAYS = self::PREFIX.'min_account_days';
     public const BADGE = self::PREFIX.'spotlight_badge';
     public const GROUP = self::PREFIX.'spotlight_group';
     /** Stamped by every kudos:spotlight, so the admin page can say when the scheduler last ran. */
@@ -104,6 +106,13 @@ final class Settings
         }
 
         return 'UTC';
+    }
+
+    public function minAccountDays(): int
+    {
+        $value = $this->settings->get(self::MIN_ACCOUNT_DAYS);
+
+        return max(0, min(365, is_numeric($value) ? (int) $value : 7));
     }
 
     public function moderation(): bool

@@ -6,11 +6,11 @@ use ErnestDefoe\Kudos\Access;
 use ErnestDefoe\Kudos\Presenter;
 use ErnestDefoe\Kudos\Settings;
 use ErnestDefoe\Kudos\Spotlights;
-use ErnestDefoe\Kudos\Week;
+use ErnestDefoe\Kudos\Weeks;
 use Flarum\User\User;
 
 /**
- * The index banner: last week's spotlight, while this week runs. The
+ * The index banner: the spotlight made this week (for the week before). The
  * spotlight itself is cached (0 queries); the member is looked up through
  * whereVisibleTo (1 indexed query) only when there's a banner to show.
  */
@@ -18,6 +18,7 @@ class ForumSpotlight
 {
     public function __construct(
         private readonly Settings $settings,
+        private readonly Weeks $weeks,
         private readonly Spotlights $spotlights,
         private readonly Presenter $presenter,
     ) {
@@ -30,7 +31,8 @@ class ForumSpotlight
             return null;
         }
         $latest = $this->spotlights->latest();
-        if (! $latest || $latest['week'] !== Week::current($this->settings)->previous()->key()) {
+        // Shown during the week it was made in (the week after the one it's for).
+        if (! $latest || $latest['created'] < $this->weeks->current()->start->getTimestamp()) {
             return null;
         }
         /** @var User|null $user */

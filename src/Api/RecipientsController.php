@@ -22,6 +22,7 @@ class RecipientsController extends Handler
     public function __construct(
         private readonly Presenter $presenter,
         private readonly ExtensionManager $extensions,
+        private readonly \ErnestDefoe\Kudos\Eligibility $eligibility,
     ) {
     }
 
@@ -40,6 +41,7 @@ class RecipientsController extends Handler
 
         $users = User::query()->whereVisibleTo($actor)
             ->where('users.id', '!=', $actor->id)
+            ->tap(fn (Builder $q) => $this->eligibility->scopeReceivers($q))
             ->where(function (Builder $w) use ($like, $nicknames) {
                 $w->where('users.username', 'like', $like);
                 if ($nicknames) {

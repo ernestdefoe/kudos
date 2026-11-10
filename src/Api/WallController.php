@@ -10,6 +10,7 @@ use ErnestDefoe\Kudos\Settings;
 use ErnestDefoe\Kudos\Spotlight;
 use ErnestDefoe\Kudos\Wallet;
 use ErnestDefoe\Kudos\Week;
+use ErnestDefoe\Kudos\Weeks;
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -34,12 +35,13 @@ class WallController extends Handler
         private readonly Settings $settings,
         private readonly Presenter $presenter,
         private readonly Wallet $wallet,
+        private readonly Weeks $weeks,
     ) {
     }
 
     protected function respond(ServerRequestInterface $request, User $actor): ResponseInterface
     {
-        $current = Week::current($this->settings);
+        $current = $this->weeks->current();
         $before = (int) self::query($request, 'before');
         $queue = self::query($request, 'queue') === '1';
         if ($queue) {
@@ -47,7 +49,7 @@ class WallController extends Handler
         }
 
         $key = self::query($request, 'week');
-        $week = $key === '' ? $current : (Week::fromKey($key, $this->settings) ?? throw new Refusal('kudos_bad_week', 404));
+        $week = $key === '' ? $current : (Week::fromKey($key, $this->weeks->timezone()) ?? throw new Refusal('kudos_bad_week', 404));
 
         $cards = Kudos::query()->visibleTo($actor)
             ->when($queue, fn (Builder $q) => $q->where('kudos.status', Kudos::PENDING))
@@ -73,9 +75,11 @@ class WallController extends Handler
             return new JsonResponse($data);
         }
 
-        // The spotlight shown with a week: its own once it's over, last week's while it runs.
-        $spotWeek = $week->key() === $current->key() ? $current->previous()->key() : $week->key();
-        $spotlight = Spotlight::query()->where('week', $spotWeek)->whereNotNull('user_id')->first();
+        // The spotlight shown with a week: its own once it's over; while it runs, the one made this week
+        // (for the latest week before it; taken from stored keys, never computed, so a changed week rule can't skip one).
+        $spotlight = $week->key() === $current->key()
+            ? Spotlight::query()->where('week', '<', $current->key())->where('created_at', '>=', $current->start->utc())->whereNotNull('user_id')->orderByDesc('week')->first()
+            : Spotlight::query()->where('week', $week->key())->whereNotNull('user_id')->first();
 
         $archive = Kudos::query()->where('status', Kudos::APPROVED)->where('week', '<', $current->key())
             ->selectRaw('week, COUNT(*) as total')->groupBy('week')->orderByDesc('week')->limit(self::ARCHIVE)

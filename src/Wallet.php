@@ -7,8 +7,10 @@ use Flarum\User\User;
 /** What the member has left this week, and who they've thanked already (the give form greys them out). */
 class Wallet
 {
-    public function __construct(private readonly Settings $settings)
-    {
+    public function __construct(
+        private readonly Settings $settings,
+        private readonly Weeks $weeks,
+    ) {
     }
 
     /** @return array{allowance: int, used: int, left: int, givenTo: list<int>, resetsAt: string, canGive: bool}|null */
@@ -17,7 +19,7 @@ class Wallet
         if (! Access::canGive($actor)) {
             return null;
         }
-        $week = Week::current($this->settings);
+        $week = $this->weeks->current();
         $givenTo = Kudos::query()->where('giver_id', $actor->id)->where('week', $week->key())->pluck('receiver_id')->map(fn ($id) => (int) $id)->values()->all();
         $allowance = $this->settings->allowanceFor($actor);
 

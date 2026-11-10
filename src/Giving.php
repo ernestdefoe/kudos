@@ -30,6 +30,8 @@ class Giving
         private readonly Settings $settings,
         private readonly ConnectionInterface $db,
         private readonly NotificationSyncer $notifications,
+        private readonly Weeks $weeks,
+        private readonly Eligibility $eligibility,
     ) {
     }
 
@@ -52,6 +54,10 @@ class Giving
         $receiver = User::query()->whereVisibleTo($actor)->find($receiverId);
         if (! $receiver) {
             throw new Refusal('kudos_no_receiver');
+        }
+        // Unconfirmed and suspended accounts can't be thanked (nor spotlit).
+        if (! $this->eligibility->canReceive($receiver)) {
+            throw new Refusal('kudos_receiver_unavailable');
         }
 
         $note = self::cleanNote($input['note'] ?? null);
@@ -77,7 +83,7 @@ class Giving
         }
 
         $allowance = $this->settings->allowanceFor($actor);
-        $week = Week::current($this->settings)->key();
+        $week = $this->weeks->current()->key();
         $queued = $this->settings->moderation() && ! Access::canModerate($actor);
 
         $this->db->table('kudos_givers')->insertOrIgnore(['user_id' => $actor->id]);

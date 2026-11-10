@@ -48,6 +48,17 @@ export default [
       }),
       89
     )
+    .setting(
+      () => ({
+        setting: setting('min_account_days'),
+        type: 'number',
+        min: 0,
+        max: 365,
+        label: t('settings.min_account_days'),
+        help: t('settings.min_account_days_help'),
+      }),
+      86
+    )
     .setting(() => ({ setting: setting('moderation'), type: 'boolean', label: t('settings.moderation'), help: t('settings.moderation_help') }), 85)
     .setting(() => ({ setting: setting('banner'), type: 'boolean', label: t('settings.banner'), help: t('settings.banner_help') }), 80)
     .customSetting(function (this: any) {

@@ -4,9 +4,8 @@ namespace ErnestDefoe\Kudos\Api;
 
 use ErnestDefoe\Kudos\Kudos;
 use ErnestDefoe\Kudos\Presenter;
-use ErnestDefoe\Kudos\Settings;
 use ErnestDefoe\Kudos\Spotlight;
-use ErnestDefoe\Kudos\Week;
+use ErnestDefoe\Kudos\Weeks;
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
@@ -26,7 +25,7 @@ class ProfileController extends Handler
 
     public function __construct(
         private readonly Presenter $presenter,
-        private readonly Settings $settings,
+        private readonly Weeks $weeks,
     ) {
     }
 
@@ -67,7 +66,7 @@ class ProfileController extends Handler
 
         $counts = Kudos::query()->where('status', Kudos::APPROVED)
             ->where(fn (Builder $q) => $q->where('receiver_id', $user->id)->orWhere('giver_id', $user->id))
-            ->selectRaw('SUM(CASE WHEN receiver_id = ? THEN 1 ELSE 0 END) as received, SUM(CASE WHEN giver_id = ? THEN 1 ELSE 0 END) as given, SUM(CASE WHEN receiver_id = ? AND week = ? THEN 1 ELSE 0 END) as week', [$user->id, $user->id, $user->id, Week::current($this->settings)->key()])
+            ->selectRaw('SUM(CASE WHEN receiver_id = ? THEN 1 ELSE 0 END) as received, SUM(CASE WHEN giver_id = ? THEN 1 ELSE 0 END) as given, SUM(CASE WHEN receiver_id = ? AND week = ? THEN 1 ELSE 0 END) as week', [$user->id, $user->id, $user->id, $this->weeks->current()->key()])
             ->toBase()->first();
 
         return new JsonResponse($data + [
