@@ -204,6 +204,23 @@ class KudosTest extends TestCase
     }
 
     #[Test]
+    public function the_week_follows_the_forums_timezone_unless_kudos_has_its_own(): void
+    {
+        // No timezone anywhere: UTC, so Monday 03:00 UTC is a new week.
+        Carbon::setTestNow(Carbon::parse('2026-11-16 03:00:00'));
+        $this->assertSame('2026-11-16', $this->api('GET', '', self::AVA)[1]['week']['key']);
+
+        // The forum's timezone (Festoon's setting): still Sunday evening in Chicago.
+        $this->set('timezone', '');
+        $this->app()->getContainer()->make(SettingsRepositoryInterface::class)->set('ernestdefoe-festoon.timezone', 'America/Chicago');
+        $this->assertSame('2026-11-09', $this->api('GET', '', self::AVA)[1]['week']['key']);
+
+        // Kudos's own setting wins.
+        $this->set('timezone', 'Asia/Tokyo');
+        $this->assertSame('2026-11-16', $this->api('GET', '', self::AVA)[1]['week']['key']);
+    }
+
+    #[Test]
     public function groups_can_get_more(): void
     {
         $this->set('group_allowances', json_encode(['5' => 5]));

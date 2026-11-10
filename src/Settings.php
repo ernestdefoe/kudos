@@ -81,11 +81,29 @@ final class Settings
         return is_numeric($value) ? ((int) $value % 7 + 7) % 7 : 1;
     }
 
+    /**
+     * The week's timezone: Kudos's own setting when an admin picked one, else
+     * the forum's (Flarum core has none, so the one the forum's other
+     * extensions share: Festoon's, Fanfare's, Logo Manager's seasons), else
+     * the app's (UTC unless config says otherwise). Read by key only, so none
+     * of those extensions has to be installed.
+     */
     public function timezone(): string
     {
-        $value = (string) $this->settings->get(self::TIMEZONE);
+        $candidates = [
+            (string) $this->settings->get(self::TIMEZONE),
+            (string) $this->settings->get('ernestdefoe-festoon.timezone'),
+            (string) $this->settings->get('ernestdefoe-fanfare.timezone'),
+            (string) (json_decode((string) $this->settings->get('ernestdefoe-logo-manager.config'), true)['seasons']['timezone'] ?? ''),
+            (string) (resolve('config')['app.timezone'] ?? ''),
+        ];
+        foreach ($candidates as $zone) {
+            if ($zone !== '' && in_array($zone, timezone_identifiers_list(), true)) {
+                return $zone;
+            }
+        }
 
-        return in_array($value, timezone_identifiers_list(), true) ? $value : 'UTC';
+        return 'UTC';
     }
 
     public function moderation(): bool

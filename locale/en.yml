@@ -139,6 +139,7 @@ ernestdefoe-kudos:
         saturday: Saturday
       timezone: Timezone for the week
       timezone_help: A new week (and new kudos) starts at midnight here. Changing this or the start day never moves kudos already given.
+      timezone_forum: The forum's timezone (UTC if none is set)
       moderation: Moderators approve kudos first
       moderation_help: New kudos wait in a queue on the wall until a moderator approves them. Moderators' own kudos skip the queue.
       banner: Show the spotlight banner above the discussion list

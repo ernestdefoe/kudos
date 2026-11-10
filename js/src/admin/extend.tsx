@@ -12,7 +12,8 @@ function zones(): Record<string, string> {
     list = (Intl as any).supportedValuesOf('timeZone');
   } catch {}
   if (!list.includes('UTC')) list = ['UTC', ...list];
-  return Object.fromEntries(list.map((z) => [z, z.replace(/_/g, ' ')]));
+  // Empty = the forum's own timezone (see Settings::timezone).
+  return { '': String(t('settings.timezone_forum')), ...Object.fromEntries(list.map((z) => [z, z.replace(/_/g, ' ')])) };
 }
 
 export default [
@@ -41,7 +42,7 @@ export default [
         setting: setting('timezone'),
         type: 'select',
         options: zones(),
-        default: 'UTC',
+        default: '',
         label: t('settings.timezone'),
         help: t('settings.timezone_help'),
       }),

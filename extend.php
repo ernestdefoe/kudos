@@ -83,7 +83,6 @@ return [
         ->default('ernestdefoe-kudos.banner', true)
         ->default('ernestdefoe-kudos.allowance', 3)
         ->default('ernestdefoe-kudos.start_day', 1)
-        ->default('ernestdefoe-kudos.timezone', 'UTC')
         ->default('ernestdefoe-kudos.moderation', false)
         ->serializeToForum('kudosNav', 'ernestdefoe-kudos.nav', 'boolval'),
 
