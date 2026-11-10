@@ -1,0 +1,435 @@
+// The six card designs. Each is a band (the illustrated top), a paper (where
+// the words go), an ink and a few art colours, for light and for dark; the
+// art (CardArt.tsx) only ever uses these. Text on a card always uses the
+// card's own ink on its own paper, never the theme's.
+
+.KudosCard--sunrise {
+  --kc-band: linear-gradient(180deg, #ffe3c2 0%, #ffd0a1 100%);
+  --kc-paper: #fff8f1;
+  --kc-ink: #4a2511;
+  --kc-soft-ink: #9a5427;
+  --kc-main: #ff922b;
+  --kc-accent: #ffd43b;
+  --kc-soft: rgba(255, 146, 43, 0.35);
+  --kc-hill: #f9b37a;
+  --kc-line: #e8590c;
+  --kc-chip: #ffe8d1;
+  [data-theme^='dark'] & {
+    --kc-band: linear-gradient(180deg, #4a2412 0%, #6b3115 100%);
+    --kc-paper: #2a1a12;
+    --kc-ink: #ffe8cc;
+    --kc-soft-ink: #ffb67a;
+    --kc-main: #f76707;
+    --kc-accent: #fcc419;
+    --kc-soft: rgba(255, 146, 43, 0.3);
+    --kc-hill: #8a3d15;
+    --kc-line: #ff922b;
+    --kc-chip: #3d2516;
+  }
+}
+.KudosCard--meadow {
+  --kc-band: linear-gradient(180deg, #e3fafc 0%, #d8f5e3 100%);
+  --kc-paper: #f6fcf2;
+  --kc-ink: #1f3a12;
+  --kc-soft-ink: #4b7a2d;
+  --kc-main: #51a83a;
+  --kc-accent: #fab005;
+  --kc-soft: #b2e59a;
+  --kc-hill: #8fd16f;
+  --kc-line: #2f9e44;
+  --kc-dot: #fff3bf;
+  --kc-chip: #e3f5d6;
+  [data-theme^='dark'] & {
+    --kc-band: linear-gradient(180deg, #0f2a2c 0%, #16301f 100%);
+    --kc-paper: #142016;
+    --kc-ink: #e3f7d0;
+    --kc-soft-ink: #a9e34b;
+    --kc-main: #5c940d;
+    --kc-soft: #2b5a20;
+    --kc-hill: #3f7d2a;
+    --kc-line: #8ce99a;
+    --kc-dot: #fff3bf;
+    --kc-chip: #1d2f1d;
+  }
+}
+.KudosCard--tide {
+  --kc-band: linear-gradient(180deg, #e7f5ff 0%, #c5e6ff 100%);
+  --kc-paper: #f4faff;
+  --kc-ink: #0b2f4d;
+  --kc-soft-ink: #2c6493;
+  --kc-main: #339af0;
+  --kc-accent: #ffd43b;
+  --kc-soft: #91cdfa;
+  --kc-line: #1971c2;
+  --kc-foam: #ffffff;
+  --kc-chip: #dcefff;
+  [data-theme^='dark'] & {
+    --kc-band: linear-gradient(180deg, #0c2236 0%, #113452 100%);
+    --kc-paper: #0e1c2a;
+    --kc-ink: #d7efff;
+    --kc-soft-ink: #74c0fc;
+    --kc-main: #1c7ed6;
+    --kc-accent: #fcc419;
+    --kc-soft: #1b4f7e;
+    --kc-line: #74c0fc;
+    --kc-foam: #a5d8ff;
+    --kc-chip: #15293d;
+  }
+}
+.KudosCard--confetti {
+  --kc-band: linear-gradient(180deg, #fff0f6 0%, #fff4e0 100%);
+  --kc-paper: #fffdf8;
+  --kc-ink: #3d2a3f;
+  --kc-soft-ink: #8a5a8d;
+  --kc-main: #f06595;
+  --kc-accent: #4dabf7;
+  --kc-third: #fcc419;
+  --kc-line: #20c997;
+  --kc-chip: #fdeef4;
+  [data-theme^='dark'] & {
+    --kc-band: linear-gradient(180deg, #3a1f2e 0%, #33281a 100%);
+    --kc-paper: #231c24;
+    --kc-ink: #fbeff8;
+    --kc-soft-ink: #f783ac;
+    --kc-line: #63e6be;
+    --kc-chip: #34253a;
+  }
+}
+.KudosCard--starlight {
+  --kc-band: linear-gradient(180deg, #1b1f4b 0%, #33276d 100%);
+  --kc-paper: #221d4d;
+  --kc-ink: #f3f0ff;
+  --kc-soft-ink: #c0b6ff;
+  --kc-main: #ffe066;
+  --kc-accent: #fff3bf;
+  --kc-soft: #3f3285;
+  --kc-line: #ffe066;
+  --kc-chip: #2f2863;
+  [data-theme^='dark'] & {
+    --kc-band: linear-gradient(180deg, #11132f 0%, #231a52 100%);
+    --kc-paper: #181437;
+    --kc-soft: #2f2565;
+    --kc-chip: #262056;
+  }
+}
+.KudosCard--letterpress {
+  --kc-band: linear-gradient(180deg, #efe2c9 0%, #e7d5b3 100%);
+  --kc-paper: #fbf6ec;
+  --kc-ink: #3e2a1c;
+  --kc-soft-ink: #7d5f43;
+  --kc-main: #c92a2a;
+  --kc-third: #1c5d99;
+  --kc-line: #8c6a4a;
+  --kc-stamp: #fffaf0;
+  --kc-chip: #f1e6d2;
+  [data-theme^='dark'] & {
+    --kc-band: linear-gradient(180deg, #3a2f22 0%, #33291d 100%);
+    --kc-paper: #251e17;
+    --kc-ink: #f3e6d0;
+    --kc-soft-ink: #d1b48c;
+    --kc-main: #ff6b6b;
+    --kc-third: #74c0fc;
+    --kc-line: #d1b48c;
+    --kc-stamp: #4a3c2c;
+    --kc-chip: #33291f;
+  }
+}
+
+// ---------------------------------------------------------------- the card
+
+.KudosCard {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: 18px;
+  background: var(--kc-paper);
+  color: var(--kc-ink);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 6px 20px rgba(0, 0, 0, 0.07);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.06),
+      0 12px 30px rgba(0, 0, 0, 0.1);
+  }
+  [data-theme^='dark'] & {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 6px 20px rgba(0, 0, 0, 0.35);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:hover {
+      transform: none;
+    }
+  }
+}
+.KudosCard--pending {
+  outline: 2px dashed var(--kc-soft-ink);
+  outline-offset: -5px;
+}
+.KudosCard--preview:hover {
+  transform: none;
+}
+
+.KudosCard-band {
+  position: relative;
+  height: 80px;
+  flex-shrink: 0;
+  background: var(--kc-band);
+}
+.KudosArt {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.KudosArt-main {
+  fill: var(--kc-main);
+}
+.KudosArt-accent {
+  fill: var(--kc-accent);
+}
+.KudosArt-third {
+  fill: var(--kc-third, var(--kc-accent));
+}
+.KudosArt-soft {
+  fill: var(--kc-soft);
+}
+.KudosArt-hill {
+  fill: var(--kc-hill, var(--kc-soft));
+}
+.KudosArt-dot {
+  fill: var(--kc-dot, #fff);
+}
+.KudosArt-stem {
+  fill: none;
+  stroke: var(--kc-main);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.KudosArt-bird,
+.KudosArt-squiggle,
+.KudosArt-foam {
+  fill: none;
+  stroke: var(--kc-line);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.7;
+}
+.KudosArt-squiggle {
+  stroke-width: 3;
+}
+.KudosArt-foam {
+  stroke: var(--kc-foam, #fff);
+  opacity: 0.9;
+}
+.KudosArt-ring {
+  fill: none;
+  stroke: var(--kc-line);
+  stroke-width: 1.6;
+  opacity: 0.55;
+}
+.KudosArt-paper {
+  fill: var(--kc-stamp, #fff);
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.2));
+}
+.KudosArt-perf {
+  fill: none;
+  stroke: var(--kc-line);
+  stroke-width: 1.2;
+  stroke-dasharray: 3 2.5;
+  opacity: 0.7;
+}
+
+.KudosCard-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  padding: 0 18px 14px;
+}
+.KudosCard-to {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  margin-top: -26px;
+}
+.KudosCard-avatar {
+  --size: 52px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px var(--kc-paper);
+}
+.KudosCard-avatar--small {
+  --size: 22px;
+  box-shadow: none;
+}
+.KudosCard-toText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+  // Below the band: only the avatar sits on the art.
+  padding-top: 31px;
+}
+.KudosCard-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--kc-soft-ink);
+}
+html:not(#x-hi) .KudosCard .KudosCard-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--kc-ink);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html:not(#x-hi) .KudosCard a.KudosCard-name:hover,
+html:not(#x-hi) .KudosCard a.KudosCard-fromName:hover {
+  text-decoration: underline;
+}
+.KudosCard-note {
+  position: relative;
+  margin: 2px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--kc-ink);
+  overflow-wrap: anywhere;
+  flex: 1;
+}
+.KudosCard-quote {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 30px;
+  line-height: 0;
+  vertical-align: -0.35em;
+  margin-right: 3px;
+  color: var(--kc-line);
+}
+.KudosCard-note--removed {
+  font-style: italic;
+  font-size: 13px;
+  color: var(--kc-soft-ink);
+}
+.KudosCard--letterpress .KudosCard-note {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+html:not(#x-hi) .KudosCard .KudosCard-post {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--kc-chip);
+  color: var(--kc-ink);
+  font-size: 12px;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+  .icon {
+    color: var(--kc-line);
+  }
+}
+.KudosCard-postTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.KudosCard-from {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--kc-chip);
+  font-size: 13px;
+  color: var(--kc-soft-ink);
+  min-width: 0;
+}
+.KudosCard-fromText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+html:not(#x-hi) .KudosCard .KudosCard-fromName {
+  font-weight: 700;
+  color: var(--kc-ink);
+  text-decoration: none;
+}
+.KudosCard-time {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--kc-soft-ink);
+}
+.KudosCard-flag {
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--kc-chip);
+  color: var(--kc-ink);
+}
+.KudosCard-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+html:not(#x-hi) .KudosCard .Button.KudosCard-controlsButton {
+  color: var(--kc-ink);
+  background: var(--kc-paper);
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  opacity: 0.85;
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+}
+
+// The give form's design picker: each swatch is a card's band.
+.KudosSwatch {
+  position: relative;
+  overflow: hidden;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: var(--kc-band);
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+  transition: transform 0.12s;
+  &:hover {
+    transform: translateY(-1px);
+  }
+  &.is-active {
+    box-shadow:
+      0 0 0 2px var(--body-bg),
+      0 0 0 4px var(--kudos-accent, #e8590c);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--kudos-accent, #e8590c);
+    outline-offset: 2px;
+  }
+}

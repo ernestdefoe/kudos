@@ -1,0 +1,37 @@
+.KudosAdmin-groups {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px;
+  gap: 6px 12px;
+  align-items: center;
+  max-width: 420px;
+  label {
+    margin: 0;
+    font-weight: normal;
+    color: var(--text-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+.KudosAdmin-spotlight {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+  .helpText {
+    margin: 0;
+  }
+  select.FormControl {
+    max-width: 400px;
+  }
+}
+.KudosAdmin-heading {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: var(--text-color);
+}
+.KudosAdmin-scheduler {
+  font-size: 13px;
+  color: var(--muted-color);
+  margin-bottom: 20px;
+}

@@ -1,0 +1,52 @@
+<?php
+
+namespace ErnestDefoe\Kudos\Api;
+
+use ErnestDefoe\Kudos\Access;
+use ErnestDefoe\Kudos\Presenter;
+use Flarum\Extension\ExtensionManager;
+use Flarum\User\User;
+use Illuminate\Database\Eloquent\Builder;
+use Laminas\Diactoros\Response\JsonResponse;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+/**
+ * GET /api/kudos/recipients?q=sam: who the give form can pick. Members the
+ * giver can see whose username (or nickname) starts with the text, never
+ * the giver. Givers only, so it can't be used to list members.
+ */
+class RecipientsController extends Handler
+{
+    public function __construct(
+        private readonly Presenter $presenter,
+        private readonly ExtensionManager $extensions,
+    ) {
+    }
+
+    protected function respond(ServerRequestInterface $request, User $actor): ResponseInterface
+    {
+        if (! Access::canGive($actor)) {
+            return new JsonResponse(['users' => []]);
+        }
+        $q = trim(mb_substr(self::query($request, 'q'), 0, 40));
+        if ($q === '') {
+            return new JsonResponse(['users' => []]);
+        }
+        $like = addcslashes($q, '%_\\').'%';
+        $nicknames = $this->extensions->isEnabled('flarum-nicknames');
+
+        $users = User::query()->whereVisibleTo($actor)
+            ->where('users.id', '!=', $actor->id)
+            ->where(function (Builder $w) use ($like, $nicknames) {
+                $w->where('users.username', 'like', $like);
+                if ($nicknames) {
+                    $w->orWhere('users.nickname', 'like', $like);
+                }
+            })
+            ->orderByDesc('users.last_seen_at')
+            ->limit(8)->get();
+
+        return new JsonResponse(['users' => $users->map(fn (User $u) => $this->presenter->user($u))->values()->all()]);
+    }
+}

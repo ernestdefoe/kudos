@@ -1,0 +1,771 @@
+// Kudos Wall. Page text comes from Flarum's CSS properties, so it follows
+// light, dark, the coloured header and themes. The cards are our own
+// surfaces: each design sets its own ink and paper for light and for dark
+// (so a theme can't put grey text on a sunrise). Link rules start with
+// html:not(#x-hi): themes colour links with selectors as strong as
+// :root:not([data-theme^="dark"]) a:not(.Button).
+
+
+.KudosPage,
+.KudosBanner,
+.KudosGiveModal,
+.KudosProfile {
+  --kudos-accent: #e8590c;
+  --kudos-accent-2: #f59f00;
+  --kudos-accent-bg: rgba(232, 89, 12, 0.1);
+  --kudos-gold: #b7791f;
+
+  [data-theme^='dark'] & {
+    --kudos-accent: #ff922b;
+    --kudos-accent-2: #fcc419;
+    --kudos-accent-bg: rgba(255, 146, 43, 0.14);
+    --kudos-gold: #fcc419;
+  }
+}
+
+// ---------------------------------------------------------------- page
+
+.KudosPage-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-bottom: 20px;
+}
+.KudosPage-heading {
+  min-width: 0;
+  flex: 1 1 320px;
+}
+html:not(#x-hi) .KudosPage .KudosPage-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--heading-color, var(--text-color));
+}
+.KudosPage-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-size: 18px;
+  color: #fff;
+  background: linear-gradient(135deg, #e8590c, #f59f00);
+  box-shadow: 0 4px 14px rgba(232, 89, 12, 0.3);
+  flex-shrink: 0;
+}
+.KudosPage-lead {
+  margin: 0;
+  color: var(--muted-color);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.KudosPage-wallet {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.KudosWallet {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px 7px 10px;
+  border-radius: 999px;
+  background: var(--control-bg);
+  color: var(--control-color);
+  font-size: 13px;
+  line-height: 1.25;
+}
+.KudosWallet-pips {
+  display: flex;
+  gap: 4px;
+}
+.KudosWallet-pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--kudos-accent);
+  opacity: 0.45;
+  &.is-left {
+    opacity: 1;
+    background: var(--kudos-accent);
+  }
+}
+.KudosWallet-text {
+  display: flex;
+  flex-direction: column;
+  strong {
+    color: var(--text-color);
+  }
+}
+.KudosWallet-reset {
+  color: var(--muted-color);
+  font-size: 12px;
+}
+html:not(#x-hi) .Button.KudosPage-give,
+html:not(#x-hi) .Button.KudosProfile-give,
+html:not(#x-hi) .Button.KudosGive-send {
+  background: linear-gradient(135deg, #e8590c, #f59f00);
+  border: 0;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(232, 89, 12, 0.3);
+  &:hover,
+  &:focus {
+    color: #fff;
+    background: linear-gradient(135deg, #d9480f, #f08c00);
+  }
+  &[disabled] {
+    opacity: 0.5;
+    box-shadow: none;
+  }
+}
+
+// ---------------------------------------------------------------- week bar
+
+.KudosWeekBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  background: var(--control-bg);
+}
+.KudosWeekBar-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 280px;
+}
+.Button.KudosWeekBar-step {
+  flex-shrink: 0;
+  background: var(--body-bg);
+  color: var(--control-color);
+  &[disabled] {
+    opacity: 0.4;
+  }
+}
+.KudosWeekBar-label {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0 4px;
+}
+.KudosWeekBar-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-color);
+}
+.KudosWeekBar-sub {
+  font-size: 12px;
+  color: var(--muted-color);
+}
+.KudosWeekBar-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.Button.KudosWeekBar-today,
+.Button.KudosWeekBar-queue {
+  background: var(--body-bg);
+  color: var(--control-color);
+  &.active {
+    background: var(--kudos-accent-bg);
+    color: var(--kudos-accent);
+  }
+  .Button-badge {
+    margin-left: 4px;
+    background: var(--kudos-accent);
+    color: #fff;
+  }
+}
+
+// ---------------------------------------------------------------- spotlight
+
+.KudosSpotlight {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 22px;
+  margin-bottom: 22px;
+  border-radius: 18px;
+  color: #3b2507;
+  background: linear-gradient(120deg, #fff4d6 0%, #ffe3a3 55%, #ffd08a 100%);
+  box-shadow: 0 6px 24px rgba(183, 121, 31, 0.18);
+  [data-theme^='dark'] & {
+    color: #fff3dc;
+    background: linear-gradient(120deg, #3a2a10 0%, #4a3010 55%, #5a3410 100%);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  }
+}
+.KudosSpotlight-rays {
+  position: absolute;
+  right: -60px;
+  top: -80px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, 0.45) 0deg 8deg, transparent 8deg 24deg);
+  mask-image: radial-gradient(circle, #000 30%, transparent 70%);
+  pointer-events: none;
+  [data-theme^='dark'] & {
+    background: repeating-conic-gradient(from 0deg, rgba(255, 210, 120, 0.12) 0deg 8deg, transparent 8deg 24deg);
+  }
+}
+.KudosSpotlight-avatar,
+.KudosBanner-avatar {
+  position: relative;
+  flex-shrink: 0;
+  .Avatar {
+    --size: 64px;
+    box-shadow:
+      0 0 0 3px #fff,
+      0 0 0 6px #f59f00;
+  }
+}
+.KudosSpotlight-medal,
+.KudosBanner-star {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #f59f00, #e8590c);
+  box-shadow: 0 0 0 2px #fff;
+}
+.KudosSpotlight-text {
+  position: relative;
+  min-width: 0;
+  flex: 1;
+}
+.KudosSpotlight-eyebrow,
+.KudosBanner-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.KudosSpotlight-name {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+html:not(#x-hi) .KudosSpotlight .KudosSpotlight-name a {
+  color: inherit;
+}
+.KudosSpotlight-count {
+  font-size: 13px;
+  opacity: 0.85;
+}
+html:not(#x-hi) .KudosSpotlight .Button.KudosSpotlight-cta {
+  position: relative;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.7);
+  color: #3b2507;
+  [data-theme^='dark'] & {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff3dc;
+  }
+}
+
+// ---------------------------------------------------------------- wall
+
+.KudosWall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(~'min(250px, 100%)', 1fr));
+  gap: 16px;
+}
+.KudosWall-more {
+  text-align: center;
+  margin-top: 18px;
+}
+.KudosEmpty {
+  text-align: center;
+  padding: 40px 16px;
+  border-radius: 18px;
+  border: 2px dashed var(--control-bg);
+  color: var(--muted-color);
+}
+.KudosEmpty-art {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  font-size: 26px;
+  color: var(--kudos-accent);
+  background: var(--kudos-accent-bg);
+}
+.KudosEmpty-title {
+  margin: 0 0 14px;
+  font-size: 15px;
+  color: var(--text-color);
+}
+.KudosEmpty--small {
+  padding: 24px 16px;
+  .KudosEmpty-title {
+    margin: 0;
+    color: var(--muted-color);
+  }
+}
+
+// ---------------------------------------------------------------- archive
+
+.KudosArchive {
+  margin-top: 32px;
+}
+html:not(#x-hi) .KudosPage .KudosArchive-title,
+html:not(#x-hi) .KudosProfile .KudosProfile-heading {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-color);
+}
+.KudosArchive-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(~'min(260px, 100%)', 1fr));
+  gap: 8px;
+}
+html:not(#x-hi) .KudosPage .KudosArchive-week {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--control-bg);
+  color: var(--control-color);
+  text-decoration: none;
+  min-width: 0;
+  &:hover,
+  &.active {
+    background: var(--kudos-accent-bg);
+    color: var(--text-color);
+  }
+}
+.KudosArchive-date {
+  font-weight: 700;
+  color: var(--text-color);
+}
+.KudosArchive-count {
+  color: var(--muted-color);
+  font-size: 12px;
+}
+.KudosArchive-spot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex-basis: 100%;
+  font-size: 12px;
+  color: var(--muted-color);
+  .icon {
+    color: var(--kudos-gold);
+  }
+}
+.KudosArchive-avatar {
+  --size: 18px;
+}
+.KudosArchive-spotName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ---------------------------------------------------------------- banner
+
+.KudosBanner {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 44px 12px 14px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  color: #3b2507;
+  background: linear-gradient(110deg, #fff4d6, #ffe3a3);
+  [data-theme^='dark'] & {
+    color: #fff3dc;
+    background: linear-gradient(110deg, #3a2a10, #4a3010);
+  }
+  .KudosBanner-avatar .Avatar {
+    --size: 44px;
+    box-shadow:
+      0 0 0 2px #fff,
+      0 0 0 4px #f59f00;
+  }
+  .KudosBanner-star {
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+    right: -5px;
+    bottom: -3px;
+  }
+}
+.KudosBanner-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 0% 50%, rgba(255, 255, 255, 0.6), transparent 40%);
+  pointer-events: none;
+  [data-theme^='dark'] & {
+    background: radial-gradient(circle at 0% 50%, rgba(255, 200, 100, 0.12), transparent 40%);
+  }
+}
+.KudosBanner-text {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.KudosBanner-line {
+  font-size: 14px;
+  line-height: 1.4;
+}
+html:not(#x-hi) .KudosBanner .KudosBanner-line a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(232, 89, 12, 0.5);
+  text-underline-offset: 2px;
+}
+html:not(#x-hi) .KudosBanner .Button.KudosBanner-cta {
+  position: relative;
+  flex-shrink: 0;
+  background: #e8590c;
+  color: #fff;
+  border: 0;
+}
+html:not(#x-hi) .KudosBanner .Button.KudosBanner-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  color: inherit;
+  opacity: 0.6;
+  &:hover {
+    opacity: 1;
+  }
+}
+@media (max-width: 767px) {
+  .KudosBanner {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .KudosBanner-text {
+    flex: 1 1 calc(100% - 64px);
+  }
+  html:not(#x-hi) .KudosBanner .Button.KudosBanner-cta {
+    margin-left: 58px;
+  }
+  .KudosSpotlight {
+    flex-wrap: wrap;
+    padding: 16px;
+  }
+  .KudosSpotlight-text {
+    flex: 1 1 calc(100% - 90px);
+  }
+  html:not(#x-hi) .KudosSpotlight .Button.KudosSpotlight-cta {
+    margin-left: 82px;
+  }
+  .KudosSpotlight-name {
+    font-size: 19px;
+  }
+}
+
+// ---------------------------------------------------------------- profile
+
+.KudosProfile-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.KudosProfile-stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-width: 0;
+}
+.KudosStat {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: var(--control-bg);
+  min-width: 92px;
+}
+.KudosStat--main {
+  background: var(--kudos-accent-bg);
+  .KudosStat-value {
+    color: var(--kudos-accent);
+  }
+}
+.KudosStat-value {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text-color);
+}
+.KudosStat-star {
+  color: var(--kudos-gold);
+  font-size: 16px;
+}
+.KudosStat-label {
+  font-size: 12px;
+  color: var(--muted-color);
+}
+.KudosProfile-section {
+  margin-bottom: 26px;
+}
+.KudosGivers,
+.KudosProfile-weeks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+html:not(#x-hi) .KudosProfile .KudosGivers-item,
+html:not(#x-hi) .KudosProfile .KudosProfile-week {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 5px 12px 5px 5px;
+  border-radius: 999px;
+  background: var(--control-bg);
+  color: var(--control-color);
+  text-decoration: none;
+  font-size: 13px;
+}
+html:not(#x-hi) .KudosProfile .KudosProfile-week {
+  padding: 6px 12px;
+  .icon {
+    color: var(--kudos-gold);
+  }
+}
+.KudosGivers-avatar {
+  --size: 26px;
+}
+.KudosGivers-name {
+  font-weight: 600;
+  color: var(--text-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.KudosGivers-count,
+.KudosProfile-weekCount {
+  color: var(--kudos-accent);
+  font-weight: 700;
+}
+.KudosWall--profile {
+  grid-template-columns: repeat(auto-fill, minmax(~'min(230px, 100%)', 1fr));
+}
+
+// ---------------------------------------------------------------- give form
+
+.KudosGiveModal {
+  .Modal-body {
+    padding-top: 18px;
+  }
+  // Core's form groups are columns that shrink their children to fit; ours span the form.
+  .Form-group {
+    align-items: stretch;
+    margin-bottom: 16px;
+  }
+}
+.KudosGive-preview {
+  max-width: 340px;
+  margin: 0 auto 18px;
+}
+.KudosGive-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+.KudosGive-chosen,
+.KudosGive-post {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--body-bg);
+  color: var(--control-color);
+  min-width: 0;
+  .Avatar {
+    --size: 30px;
+  }
+}
+.KudosGive-post {
+  margin-top: 8px;
+  padding: 6px 6px 6px 12px;
+  font-size: 13px;
+}
+.KudosGive-chosenName {
+  font-weight: 700;
+  color: var(--text-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.KudosGive-postTitle {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html:not(#x-hi) .KudosGiveModal .Button.KudosGive-change {
+  margin-left: auto;
+  color: var(--kudos-accent);
+}
+.KudosGive-warn {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--control-bg);
+  color: var(--muted-color);
+  white-space: nowrap;
+}
+.KudosGive-search {
+  position: relative;
+}
+.KudosGive-spinner {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+}
+.KudosGive-results {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--body-bg);
+  box-shadow: 0 0 0 1px var(--control-bg);
+  max-height: 260px;
+  overflow-y: auto;
+}
+.KudosGive-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-color);
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+  .Avatar {
+    --size: 28px;
+  }
+  &:hover:not([disabled]),
+  &:focus-visible {
+    background: var(--control-bg);
+  }
+  &[disabled] {
+    cursor: default;
+    opacity: 0.6;
+  }
+}
+.KudosGive-resultName {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.KudosGive-resultUser {
+  color: var(--muted-color);
+  font-size: 12px;
+  margin-right: auto;
+}
+.KudosGive-none {
+  margin: 8px 0 0;
+  color: var(--muted-color);
+  font-size: 13px;
+}
+.KudosGive-note {
+  resize: vertical;
+  min-height: 80px;
+}
+.KudosGive-counter {
+  text-align: right;
+  margin-top: -6px !important;
+  font-size: 12px;
+  color: var(--muted-color);
+  margin-top: 4px;
+  &.is-low {
+    color: var(--kudos-accent);
+    font-weight: 700;
+  }
+}
+.KudosGive-designs {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.KudosGive-footer {
+  display: flex;
+  flex-direction: row !important;
+  margin-top: 18px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 0;
+}
+.KudosGive-left {
+  color: var(--muted-color);
+  font-size: 13px;
+}
+.KudosGive-blocked {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--text-color);
+  .icon {
+    color: var(--kudos-accent);
+    margin-right: 4px;
+  }
+}
