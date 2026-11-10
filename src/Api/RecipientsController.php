@@ -14,7 +14,8 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * GET /api/kudos/recipients?q=sam: who the give form can pick. Members the
  * giver can see whose username (or nickname) starts with the text, never
- * the giver. Givers only, so it can't be used to list members.
+ * the giver. Givers with core's searchUsers permission only, so it can't
+ * be used to list members anyone couldn't already search for.
  */
 class RecipientsController extends Handler
 {
@@ -26,7 +27,8 @@ class RecipientsController extends Handler
 
     protected function respond(ServerRequestInterface $request, User $actor): ResponseInterface
     {
-        if (! Access::canGive($actor)) {
+        // Core's own rule for looking members up by name applies here too.
+        if (! Access::canGive($actor) || ! $actor->can('searchUsers')) {
             return new JsonResponse(['users' => []]);
         }
         $q = trim(mb_substr(self::query($request, 'q'), 0, 40));

@@ -98,6 +98,11 @@ export default class GiveKudosModal extends FormModal<Attrs> {
     this.results = [];
   }
 
+  pickFirst() {
+    const first = this.results.find((p) => !this.thanked(p));
+    if (first) this.pick(first);
+  }
+
   preview(): Card {
     const me = app.session.user!;
     return {
@@ -162,6 +167,14 @@ export default class GiveKudosModal extends FormModal<Attrs> {
                 aria-label={tx('give.search_placeholder')}
                 value={this.query}
                 oninput={(e: InputEvent) => this.search((e.target as HTMLInputElement).value)}
+                onkeydown={(e: KeyboardEvent) => {
+                  // The form can't submit while Send is disabled, so Enter is handled here: it picks the first match.
+                  // A block, never `e.key === 'Enter' && …`: a handler returning false swallows every other key.
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.pickFirst();
+                  }
+                }}
               />
               {this.searching ? <LoadingIndicator size="small" display="inline" className="KudosGive-spinner" /> : null}
               {this.results.length ? (
@@ -251,10 +264,8 @@ export default class GiveKudosModal extends FormModal<Attrs> {
 
   onsubmit(e: SubmitEvent) {
     e.preventDefault();
-    // Enter in the search box picks the first match instead of sending.
     if (!this.receiver) {
-      const first = this.results.find((p) => !this.thanked(p));
-      if (first) this.pick(first);
+      this.pickFirst();
       return;
     }
     if (this.thanked(this.receiver) || this.note.trim().length < 3) return;
